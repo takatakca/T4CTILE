@@ -35,3 +35,24 @@ Inventory R · Orders R/W · Merchant R · Employees R · Customers R/W
 
 Cette application fait partie de la suite TAKATAK sur Clover : toutes les apps partagent le même dos d'événements (webhooks Clover), le même **client unique reconnu par son numéro de téléphone** (+ courriel), et les mêmes commandes et paiements Clover. Aucune app ne vit en silo : les données qu'elle produit alimentent les autres apps de la suite (voir « Clover API — Main Stuff — Robot Notepad », section 3, déposé au Drive Opérations et dans `~/workspace/clover-apps/`).
 
+
+## État du code (2026-10-28)
+
+Application Next.js 16 qui fonctionne (tests verts, build OK). Mise en ligne : `DEPLOY.md` § 5.
+
+**Ce qui marche :**
+- **Commun (kit Suite TAKATAK, identique dans les 9 apps)** : connexion Clover OAuth v2 (jetons scellés, rafraîchis
+  seuls, supprimés à la désinstallation) · webhook Clover (vérification, X-Clover-Auth, chaque événement une fois) ·
+  base PostgreSQL (ou mémoire en dev) · session marchand · paliers Base / Premium / VIP lus depuis la facturation
+  Clover (`OWN_MERCHANTS` = VIP) · marchand `RNVTBYMCKXEJ1` en lecture seule · lien Suite TAKATAK avec Food Hub ·
+  page d'accueil FR/EN, tableau de bord `/app`, pages légales `/legal/*`, `/api/health`, `/api/cron`, clés d'appareils.
+- Borne web plein écran `/kiosk` (FR/EN, gros boutons, photos Premium, options avec min/max, panier, retour auto à l'accueil)
+- Jumelage par clé de borne ; commande vérifiée contre le menu Clover → commande Clover « Borne <nom> · #<n> » + impression cuisine
+- Limite 20 commandes / 10 min par borne ; numéros par jour ; écran « prête » alimenté par Food Hub
+
+**Ce qui reste :**
+- **Paiement sur l'appareil** (application Android Kiosk + Payments API) : la borne web fait « payer au comptoir ».
+- Fidélité à la borne (LOY4LTY), carte-cadeau (REW4RDS), vente suggestive (M4RKETING) — API déjà prêtes dans ces apps.
+
+**Développer :** `npm install` · `npm run dev` · `npm run typecheck` · `npm test` · `npm run build`. Règles pour
+les agents : `AGENTS.md` ; journal : `WORKLOG.md`.
