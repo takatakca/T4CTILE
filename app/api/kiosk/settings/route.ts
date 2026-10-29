@@ -5,9 +5,9 @@ import { saveSettings } from '@/lib/domain/kiosk';
 
 export const dynamic = 'force-dynamic';
 
-// { welcomeFr?, welcomeEn?, idleSeconds?, photoBaseUrl? (Premium) }
+// { welcomeFr?, welcomeEn?, idleSeconds?, photoBaseUrl? (Premium) } — kiosk.settings (manager by default).
 export async function PUT(req: Request) {
-  const c = await requireMerchant(req);
+  const c = await requireMerchant(req, 'base', { action: 'kiosk.settings' });
   if (!isCtx(c)) return c;
   const b = await readJson(req);
   if (!b) return fail('JSON body required');
